@@ -127,10 +127,7 @@ class App extends Component {
         this.setState({input: event.target.value});
     }
 
-    onButtonSubmit = (event) => {
-
-        this.setState({imageUrl: this.state.input});
-
+    getClarifaiData = async () => {
         const PAT = process.env.REACT_APP_CLARIFAI_PAT;
         const USER_ID = process.env.REACT_APP_CLARIFAI_USER_ID;
         const APP_ID = process.env.REACT_APP_CLARIFAI_APP_ID;
@@ -163,10 +160,14 @@ class App extends Component {
             body: raw
         };
 
-        fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-            .then(response => response.json())
-            .then(result => this.displayFaceBox(this.calculateFaceLocation(result)))
-            .catch(error => console.log('error', error));
+        const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions);
+        return await response.json();
+    }
+
+    onButtonSubmit = async (event) => {
+        this.setState({imageUrl: this.state.input});
+        const data = await this.getClarifaiData();
+        this.displayFaceBox(this.calculateFaceLocation(data));
     }
 
     render() {
