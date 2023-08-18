@@ -1,13 +1,35 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+@font-face {
+  font-family: Anurati;
+  src: url("./assets/fonts/Anurati-Regular.otf") format("opentype");
+}
+
+*{
+  font-family: 'Anurati', sans-serif;
+  letter-spacing: 5px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(144deg, rgba(255,94,223,1) 0%, rgba(4,200,222,1) 87%);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
+.text-shadow{
+  text-shadow: #000 5px 5px 10px;
+}
+
+button{
+  cursor: pointer;
 }

@@ -1,0 +1,24 @@
+.tilt {
+    /*background: linear-gradient(89deg, #FF5EDF 0%, #04C8DE 100%);*/
+}
+
+.logo {
+    pointer-events: none;
+    height: 125px;
+    filter: drop-shadow(5px 20px 10px #ffffff);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .logo {
+        animation: logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
