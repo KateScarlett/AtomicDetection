@@ -12,7 +12,7 @@
 
 body {
   margin: 0;
-  height: 100vh;
+  min-height: 100vh;
   background: linear-gradient(144deg, rgba(255,94,223,1) 0%, rgba(4,200,222,1) 87%);
 }
 
@@ -32,4 +32,11 @@ code {
 
 button{
   cursor: pointer;
+}
+
+.purple-button{
+  background: #5d16d8;
+  border:none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }

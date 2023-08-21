@@ -2,6 +2,13 @@
   text-align: center;
 }
 
+.signin{
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 #tsparticles{
   position: fixed;
   top: 0;
