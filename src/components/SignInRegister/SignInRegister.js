@@ -3,14 +3,14 @@ import './SignInRegister.css';
 import SignIn from "../SignIn/SignIn";
 import Register from "../Register/Register";
 
-const SignInRegister = ({route, onRouteChange}) => {
+const SignInRegister = ({loadUser, route, onRouteChange}) => {
     if (route === 'signin') {
         return (
-            <SignIn onRouteChange={onRouteChange}/>
+            <SignIn loaduser={loadUser} onRouteChange={onRouteChange}/>
         );
     } else if (route === 'register') {
         return (
-            <Register onRouteChange={onRouteChange}/>
+            <Register loadUser={loadUser} onRouteChange={onRouteChange}/>
         )
     }
 };

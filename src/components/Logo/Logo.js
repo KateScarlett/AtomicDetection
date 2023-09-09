@@ -1,6 +1,5 @@
 import React from 'react';
 import './Logo.css';
-import atom from './atom.svg';
 import {Tilt} from "react-tilt";
 
 const Logo = () => {
@@ -19,7 +18,7 @@ const Logo = () => {
     return (
         <div className="ma4  mt0">
             <Tilt className="tilt" options={defaultOptions}>
-                <div className="pa3"><img className="logo" alt="atom" src={atom}/></div>
+                <div className="pa3"><img className="logo" alt="atom" src={process.env.PUBLIC_URL + '/atom.svg'}/></div>
             </Tilt>
         </div>
     );

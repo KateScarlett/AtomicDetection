@@ -6,7 +6,7 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Rank from "./components/Rank/Rank";
 import Particles from "react-particles";
 import {loadSlim} from "tsparticles-slim";
-import {Component} from "react";
+import React, {Component} from "react";
 import SignInRegister from "./components/SignInRegister/SignInRegister";
 
 const particlesInit = (async engine => {
@@ -101,9 +101,28 @@ class App extends Component {
             imageUrl: '',
             box: {},
             route: 'signin',
-            isSignedIn: false
+            isSignedIn: false,
+            user: {
+                id: '',
+                name: '',
+                email: '',
+                entries: 0,
+                joined: '',
+            }
         }
     }
+
+    loadUser = (data) => {
+        this.setState({
+            user: {
+                id: data.id,
+                name: data.name,
+                email: data.email,
+                entries: data.entries,
+                joined: data.joined,
+            }
+        })
+    };
 
     calculateFaceLocation = (data) => {
         const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -119,7 +138,7 @@ class App extends Component {
     }
 
     displayFaceBox = (box) => {
-        console.log(box);
+        //console.log(box);
         this.setState({box: box});
     }
 
@@ -164,23 +183,41 @@ class App extends Component {
         return await response.json();
     }
 
+    UpdateProfile = async () => {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: this.state.user.id
+            })
+        };
+        const response = await fetch('http://localhost:3000/image', requestOptions);
+        const countEntries = await response.json();
+        if(countEntries){
+           this.setState(Object.assign(this.state.user, {entries: countEntries}));
+        }
+    }
+
     onButtonSubmit = async (event) => {
         this.setState({imageUrl: this.state.input});
         const data = await this.getClarifaiData();
+        await this.UpdateProfile();
         this.displayFaceBox(this.calculateFaceLocation(data));
     }
 
     onRouteChange = (route) => {
-        if(route === 'signout'){
-            this.setState({isSignedIn: false}, () =>{
+        if (route === 'signout') {
+            this.setState({isSignedIn: false}, () => {
                 console.log(`route: ${route}`);
                 console.log(`state: ${this.state.route}`);
             });
             this.setState({route: 'signin'});
-        }else if (route === 'home'){
+        } else if (route === 'home') {
             this.setState({isSignedIn: true});
             this.setState({route: route})
-        }else{
+        } else {
             this.setState({route: route})
         }
     };
@@ -200,7 +237,7 @@ class App extends Component {
                 {route === 'home'
                     ? <div>
                         <Logo/>
-                        <Rank/>
+                        <Rank name={this.state.user.name} entries={this.state.user.entries}/>
                         <ImageLinkForm
                             onInputChange={this.onInputChange}
                             onButtonSubmit={this.onButtonSubmit}
@@ -211,7 +248,7 @@ class App extends Component {
                         />
                     </div>
                     :
-                        <SignInRegister route={this.state.route} onRouteChange={this.onRouteChange}/>
+                    <SignInRegister loadUser={this.loadUser} route={this.state.route} onRouteChange={this.onRouteChange}/>
                 }
             </div>
         );
