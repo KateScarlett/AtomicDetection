@@ -39,7 +39,7 @@ class Register extends React.Component {
         };
         const response = await fetch('http://localhost:3000/register', requestOptions);
         const user = await response.json();
-        if(user){
+        if(Object.keys(user).length !== 0 && user.id){
             this.props.loadUser(user);
             this.props.onRouteChange('home');
         }

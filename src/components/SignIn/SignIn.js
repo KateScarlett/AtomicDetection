@@ -31,9 +31,9 @@ class SignIn extends React.Component {
             })
         };
         const response = await fetch('http://localhost:3000/signin', requestOptions);
-        const data = await response.json();
-        if(Object.keys(data).length !== 0 && data.id){
-            this.props.loaduser(data);
+        const user = await response.json();
+        if(Object.keys(user).length !== 0 && user.id){
+            this.props.loaduser(user);
             this.props.onRouteChange('home');
         }
     }

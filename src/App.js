@@ -92,24 +92,26 @@ const particleOptions = {
     detectRetina: true,
 }
 
+const initialState = {
+    input: '',
+    imageUrl: '',
+    box: {},
+    route: 'signin',
+    isSignedIn: false,
+    user: {
+        id: '',
+        name: '',
+        email: '',
+        entries: 0,
+        joined: '',
+    }
+}
+
 class App extends Component {
 
     constructor() {
         super();
-        this.state = {
-            input: '',
-            imageUrl: '',
-            box: {},
-            route: 'signin',
-            isSignedIn: false,
-            user: {
-                id: '',
-                name: '',
-                email: '',
-                entries: 0,
-                joined: '',
-            }
-        }
+        this.state = initialState;
     }
 
     loadUser = (data) => {
@@ -147,43 +149,20 @@ class App extends Component {
     }
 
     getClarifaiData = async () => {
-        const PAT = process.env.REACT_APP_CLARIFAI_PAT;
-        const USER_ID = process.env.REACT_APP_CLARIFAI_USER_ID;
-        const APP_ID = process.env.REACT_APP_CLARIFAI_APP_ID;
-        const MODEL_ID = process.env.REACT_APP_CLARIFAI_MODEL_ID;
-        const MODEL_VERSION_ID = process.env.REACT_APP_CLARIFAI_MODEL_VERSION_ID;
-        const IMAGE_URL = this.state.input;
-
-        const raw = JSON.stringify({
-            "user_app_id": {
-                "user_id": USER_ID,
-                "app_id": APP_ID
-            },
-            "inputs": [
-                {
-                    "data": {
-                        "image": {
-                            "url": IMAGE_URL
-                        }
-                    }
-                }
-            ]
-        });
-
         const requestOptions = {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Key ' + PAT
+                'Content-Type': 'application/json'
             },
-            body: raw
+            body: JSON.stringify({
+                url: this.state.input
+            })
         };
-
-        const response = await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions);
+        const response = await fetch('http://localhost:3000/api', requestOptions);
         return await response.json();
     }
 
-    UpdateProfile = async () => {
+    updateProfile = async () => {
         const requestOptions = {
             method: 'PUT',
             headers: {
@@ -203,15 +182,14 @@ class App extends Component {
     onButtonSubmit = async (event) => {
         this.setState({imageUrl: this.state.input});
         const data = await this.getClarifaiData();
-        await this.UpdateProfile();
+        await this.updateProfile();
         this.displayFaceBox(this.calculateFaceLocation(data));
     }
 
     onRouteChange = (route) => {
         if (route === 'signout') {
             this.setState({isSignedIn: false}, () => {
-                console.log(`route: ${route}`);
-                console.log(`state: ${this.state.route}`);
+                this.setState(initialState);
             });
             this.setState({route: 'signin'});
         } else if (route === 'home') {
